@@ -20,9 +20,9 @@ export class ContactMessage {
   @Column({ default: false })
   isRead: boolean;
 
-  @Column('datetime')
+  @Column('timestamp')
   createdAt: Date;
 
-  @Column('datetime', { nullable: true })
+  @Column('timestamp', { nullable: true })
   readAt: Date;
 }

@@ -17,9 +17,9 @@ export class Skill {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column('datetime')
+  @Column('timestamp')
   createdAt: Date;
 
-  @Column('datetime')
+  @Column('timestamp')
   updatedAt: Date;
 }

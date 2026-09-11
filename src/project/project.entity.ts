@@ -24,9 +24,9 @@ export class Project {
   @Column({ nullable: true })
   imageUrl: string;
 
-  @Column('datetime')
+  @Column('timestamp')
   createdAt: Date;
 
-  @Column('datetime')
+  @Column('timestamp')
   updatedAt: Date;
 }
