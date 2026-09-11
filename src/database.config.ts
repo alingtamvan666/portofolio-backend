@@ -1,19 +1,24 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-const isProduction = process.env.NODE_ENV === 'production';
+// Production config (PostgreSQL)
+const isProduction = process.env.NODE_ENV === 'production' &&
+  !!process.env.DB_HOST &&
+  !!process.env.DB_USER &&
+  !!process.env.DB_PASSWORD &&
+  !!process.env.DB_NAME;
 
 export const databaseConfig: TypeOrmModuleOptions = isProduction ? {
-  type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
+  type: 'postgres', // Hardcode sebagai workaround TypeScript strict typing
+  host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT || '5432'),
-  username: process.env.DB_USERNAME || 'postgres',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_DATABASE || 'railway',
-  synchronize: false, // False di production - gunakan migration!
-  logging: false,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  entities: ['dist/**/*.entity{.js,.ts}', './src/**/*.entity{.ts,.js}'],
+  synchronize: false,
 } : {
   type: 'better-sqlite3',
   database: 'db.sqlite',
-  entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  synchronize: true, // Auto-create tables only for local development
+  entities: ['dist/**/*.entity{.js,.ts}', './src/**/*.entity{.ts,.js}'],
+  synchronize: true,
 };
