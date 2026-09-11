@@ -17,9 +17,9 @@ export class Admin {
   @Column({ default: false })
   isActive: boolean;
 
-  @Column('datetime')
+  @Column('timestamp')
   createdAt: Date;
 
-  @Column('datetime')
+  @Column('timestamp')
   updatedAt: Date;
 }
