@@ -7,8 +7,6 @@ import { ProjectModule } from './project/project.module';
 import { SkillModule } from './skill/skill.module';
 import { ContactModule } from './contact/contact.module';
 import { AdminModule } from './admin/admin.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { UploadModule } from './upload/upload.module';
 
 @Module({
