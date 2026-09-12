@@ -30,6 +30,7 @@
     "@types/node": "^24.0.0",
     "@types/pg": "^8.11.10",
     "@types/jsonwebtoken": "^9.0.9",
+    "@types/multer": "^2.3.0",
     "typescript": "^6.0.2"
   }
 }

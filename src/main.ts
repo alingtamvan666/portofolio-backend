@@ -1,15 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import * as express from 'express';
 import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const server = express();
+  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
-  // Static file serving for uploads
-  app.useStaticAssets({
-    rootPath: join(process.cwd(), 'uploads'),
-    prefix: '/uploads/',
-  });
+  // Serve uploaded files as static
+  server.use('/uploads', express.static(join(process.cwd(), 'uploads')));
 
   // CORS Configuration
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
