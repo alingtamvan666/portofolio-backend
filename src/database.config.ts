@@ -12,7 +12,7 @@ export const databaseConfig: TypeOrmModuleOptions = isProduction ? {
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'railway',
   entities: ['dist/**/*.entity{.js,.ts}'],
-  synchronize: false,
+  synchronize: true, // TEMPORARY: Auto-create tables for first deployment!
 } : {
   type: 'better-sqlite3',
   database: 'db.sqlite',
