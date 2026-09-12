@@ -1,23 +1,49 @@
-import { Controller, Post, Get, Param, BadRequestException, Body } from '@nestjs/common';
+import { Controller, Post, Get, Param, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname, join } from 'path';
+import { existsSync, mkdirSync } from 'fs';
 
 @Controller('uploads')
 export class UploadController {
   @Post()
-  async uploadFile(@Body() body: any) {
-    // Simple dummy upload handler for now
-    // Actual implementation requires multer which needs proper setup
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: (req, file, cb) => {
+          const dir = join(process.cwd(), 'uploads');
+          if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+          cb(null, dir);
+        },
+        filename: (req: any, file: any, cb: any) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname).toLowerCase();
+          cb(null, `${uniqueSuffix}${ext}`);
+        },
+      }),
+      fileFilter: (req: any, file: any, cb: any) => {
+        const allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+        const ext = extname(file.originalname).toLowerCase();
+        if (!allowed.includes(ext)) {
+          cb(new BadRequestException('Only image files allowed (jpg, png, gif, webp)'), false);
+        } else {
+          cb(null, true);
+        }
+      },
+      limits: { fileSize: 5 * 1024 * 1024 },
+    }),
+  )
+  uploadFile(@UploadedFile() file: any) {
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
+    const url = `/uploads/${file.filename}`;
     return {
       success: true,
-      url: '/placeholder.png',
-      message: 'Image upload endpoint ready (requires file handling)',
-    };
-  }
-
-  @Get(':filename')
-  getFile(@Param('filename') filename: string) {
-    return {
-      error: 'Please implement static file serving via Railway volumes',
-      filename
+      filename: file.filename,
+      originalName: file.originalname,
+      url,
+      message: 'File uploaded successfully',
     };
   }
 }
