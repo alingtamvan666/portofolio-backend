@@ -1,7 +1,7 @@
-import { Controller, Post, Get, Param, Body, BadRequestException, StreamableFile, Res } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, BadRequestException, Res } from '@nestjs/common';
 import { existsSync, mkdirSync, writeFileSync, createReadStream } from 'fs';
 import { join } from 'path';
-import { Response } from 'express';
+import type { Response } from 'express';
 
 @Controller('uploads')
 export class UploadController {
